@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InsuranceComp", "ConsoleApp3\InsuranceComp.csproj", "{B6C43696-DA86-48F5-A025-6411C7E24DDB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InsuranceComp", "InsuranceComp\InsuranceComp.csproj", "{B6C43696-DA86-48F5-A025-6411C7E24DDB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InsuranceComp.Test", "InsuranceComp.Test\InsuranceComp.Test.csproj", "{81A9F39B-F23F-4012-AA49-1AEE5003F737}"
 EndProject

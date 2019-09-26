@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ConsoleApp3\InsuranceComp.csproj" />
+    <ProjectReference Include="..\InsuranceComp\InsuranceComp.csproj" />
   </ItemGroup>
 
 </Project>
