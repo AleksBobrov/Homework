@@ -6,9 +6,6 @@ namespace InsuranceComp
     { 
         public List<PolicyModel> PolicyList { get; set; }
         public List<RiskModel> RiskList { get; set; }
-        private FakeStorage()
-        {
-        }
         private static FakeStorage instance = null;
         public static FakeStorage Instance
         {
