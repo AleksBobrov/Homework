@@ -94,29 +94,28 @@ namespace InsuranceComp.UnitTest.BusinessLogic.Test
             Assert.That(() => availableRiskUpdater.RemoveAvailableRisk(testRiskName), Throws.Exception);
         }
 
-        //[Test]
-        //public void RemoveAvailableRisk_ShouldCallAvailableRiskToChangeValue()
-        //{
-        //    var testRisk = new Risk
-        //    {
-        //        Name = "test risk",
-        //        YearlyPrice = 5.5m
-        //    };
+        [Test]
+        public void RemoveAvailableRisk_ShouldCallAvailableRisksListToChangeValue()
+        {
+            var testRisk = new Risk
+            {
+                Name = "test risk",
+                YearlyPrice = 5.5m
+            };
 
-        //    var testAvailableRiskList = new List<Risk>();
-        //    testAvailableRiskList.Add(testRisk);
+            var testAvailableRiskList = new List<Risk>();
+            testAvailableRiskList.Add(testRisk);
 
-        //    var mockCompany = new Mock<IInsuranceCompany>();
+            var mockCompany = new Mock<IInsuranceCompany>();
 
-        //    var testRiskName = "test risk";
+            var testRiskName = "test risk";
 
-        //    Predicate<Risk> funct = (x) => (x.Name == testRiskName);
-        //    mockCompany.Setup(_ => It.IsAny<Predicate>
-           
-        //    var availableRiskUpdater = new AvailableRiskUpdater(mockCompany.Object);
-        //    availableRiskUpdater.RemoveAvailableRisk(testRiskName);
+            mockCompany.Setup(mock => mock.AvailableRisks).Returns(testAvailableRiskList);
 
-        //    mockCompany.Verify(mock => mock.AvailableRisks.RemoveAt(0), Times.Once);
-        //}
+            var availableRiskUpdater = new AvailableRiskUpdater(mockCompany.Object);
+            availableRiskUpdater.RemoveAvailableRisk(testRiskName);
+
+            mockCompany.Verify(mock => mock.AvailableRisks, Times.Exactly(2));
+        }
     }
 }
