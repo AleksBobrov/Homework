@@ -24,7 +24,7 @@ namespace InsuranceComp.BusinessLogic
             var policyModel = _policyRepository.Get(policyId);
 
             if (validFrom > policyModel.ValidTill) throw new RiskValidityPeriodException();
-            if (policyModel.InsuredRisks.Contains(risk)) throw new DuplicateRiskException();
+            if (policyModel.InsuredRisks.Contains(risk)) throw new DuplicateRiskException(risk.Name);
 
             var riskId = IdGenerator.ConstructRiskId(risk.Name, policyModel.NameOfInsuredObject, effectiveDate);
 

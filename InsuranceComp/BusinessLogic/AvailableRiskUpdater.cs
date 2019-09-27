@@ -20,7 +20,7 @@ namespace InsuranceComp
             }
             else
             {
-                throw new DuplicateRiskException();
+                throw new DuplicateAvailableRiskException(risk.Name);
             }
         }
 
@@ -32,18 +32,17 @@ namespace InsuranceComp
 
         public IAvailableRiskUpdater RemoveAvailableRisk(string nameOfRisktoRemove)
         {
-            var doesRiskExist = _insuranceCompany.AvailableRisks
-                .Any(avRisk => avRisk.Name == nameOfRisktoRemove);
+            var riskIndex = _insuranceCompany
+                .AvailableRisks
+                .ToList()
+                .FindIndex(risk => risk.Name == nameOfRisktoRemove);
 
-            if (_insuranceCompany.AvailableRisks.Count == 0 || !doesRiskExist)
+            if (riskIndex == -1)
             {
-                throw new NotExistingRiskException();
+                throw new RiskDoesNotExistInAvailableListException(nameOfRisktoRemove);
             } else
             {
-                _insuranceCompany.AvailableRisks = _insuranceCompany
-                    .AvailableRisks
-                    .Where(avRisk => avRisk.Name != nameOfRisktoRemove)
-                    .ToList();
+                _insuranceCompany.AvailableRisks.RemoveAt(riskIndex);
             }
             return this;
         }

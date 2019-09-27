@@ -1,5 +1,4 @@
 using InsuranceComp.BusinessLogic.Exceptions;
-using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -56,35 +55,39 @@ namespace InsuranceComp.IntegrationTest.AvailableRiskUpdaterTests
         [Test]
         public void AvailableRisks_AddingDuplicateRiskToAvailableRisksList_ShouldThrowException()
         {
-            Exception ex = Assert.Throws<DuplicateRiskException>(() =>
+            Exception ex = Assert.Throws<DuplicateAvailableRiskException>(() =>
                AvailableRiskUpdater
                 .AddAvailableRisk(Risk1)
                 .AddAvailableRisk(Risk1)
             );
 
-            Assert.AreEqual("Duplicate risk.", ex.Message);
+            Assert.AreEqual($"Available risk with '{Risk1.Name}' name already exists.", ex.Message);
         }
 
         [Test]
         public void AvailableRisks_RemovingNotExistingRiskFromAvailableRisksList_ShouldThrowException()
         {
-            Exception ex = Assert.Throws<NotExistingRiskException>( () =>
+            var testRiskName = "Test risk 2";
+
+            Exception ex = Assert.Throws<RiskDoesNotExistInAvailableListException>( () =>
                 AvailableRiskUpdater
                     .AddAvailableRisk(Risk1)
-                    .RemoveAvailableRisk("Test risk 2")
+                    .RemoveAvailableRisk(testRiskName)
             );
-            Assert.AreEqual("There is no such risk in available risk list.", ex.Message);
+            Assert.AreEqual($"Risk with name '{testRiskName}' does not exist in available list.", ex.Message);
         }
 
         [Test]
         public void AvailableRisks_RemovingRiskFromEmptyAvailableRisksList_ShouldThrowException()
         {
-            Exception ex = Assert.Throws<NotExistingRiskException>(() =>
+            var testRiskName = "Test risk 2";
+
+            Exception ex = Assert.Throws<RiskDoesNotExistInAvailableListException>(() =>
                AvailableRiskUpdater
                    .AddAvailableRisk(Risk1)
-                   .RemoveAvailableRisk("Test risk 2")
+                   .RemoveAvailableRisk(testRiskName)
             );
-            Assert.AreEqual("There is no such risk in available risk list.", ex.Message);
+            Assert.AreEqual($"Risk with name '{testRiskName}' does not exist in available list.", ex.Message);
         }
 
         [Test]
@@ -150,19 +153,6 @@ namespace InsuranceComp.IntegrationTest.AvailableRiskUpdaterTests
             var riskAfterUpdate = Company.AvailableRisks.FirstOrDefault(avRisk => avRisk.Name == "Test risk 1");
             Assert.AreEqual(newYearlyPrice, riskAfterUpdate.YearlyPrice);
             Assert.AreEqual("Test risk 1", riskAfterUpdate.Name);
-        }
-
-        [Test]
-        public void TestUnit()
-        {
-            var mockCompany = new Mock<IInsuranceCompany>();
-
-            mockCompany.Setup(mock => mock.AvailableRisks.Contains(Risk1)).Returns(false);
-
-            var availableRiskUpdater = new AvailableRiskUpdater(mockCompany.Object);
-            availableRiskUpdater.AddAvailableRisk(Risk1);
-
-            mockCompany.Verify(mock => mock.AvailableRisks.Add(Risk1), Times.Once);
         }
     }
 }

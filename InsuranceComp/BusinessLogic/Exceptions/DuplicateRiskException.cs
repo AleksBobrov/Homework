@@ -5,7 +5,8 @@ namespace InsuranceComp.BusinessLogic.Exceptions
     [Serializable]
     public class DuplicateRiskException : Exception
     {
-        public DuplicateRiskException() : base("Duplicate risk.")
+        public DuplicateRiskException(string riskName)
+            : base($"Risk with '{riskName}' name already exists on that policy.")
         {
 
         }

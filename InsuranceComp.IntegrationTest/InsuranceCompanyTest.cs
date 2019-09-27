@@ -131,12 +131,15 @@ namespace InsuranceComp.IntegrationTest.InsuranceCompanyTests
         [Test]
         public void InsuranceCompany_ShouldThrowExceptionIfGetPolicyDoesNotExist()
         {
+            var effectiveDate = DateTime.Now;
+
             Exception ex = Assert.Throws<NoSuchPolicyException>(() =>
-                Company.GetPolicy(DEFAULT_OBJECT_NAME, DateTime.Now)
+                Company.GetPolicy(DEFAULT_OBJECT_NAME, effectiveDate)
             );
 
             Assert.AreEqual(0, FakeStorage.Instance.PolicyList.Count);
-            Assert.AreEqual("Such policy does not exist.", ex.Message);
+            Assert.AreEqual($"Policy with name '{DEFAULT_OBJECT_NAME}' and effective date" +
+                  $"{effectiveDate.ToShortDateString()} does not exist.", ex.Message);
         }
 
         [Test]
@@ -319,7 +322,8 @@ namespace InsuranceComp.IntegrationTest.InsuranceCompanyTests
             );
 
             Assert.AreEqual(1, FakeStorage.Instance.PolicyList.Count);
-            Assert.AreEqual("Duplicate policy!", ex.Message);
+            Assert.AreEqual($"Policy with insured object name '{DEFAULT_OBJECT_NAME}' " +
+                  $"and effective date {effectiveDate.ToShortDateString()} already exists.", ex.Message);
         }
 
         [Test]
@@ -339,12 +343,12 @@ namespace InsuranceComp.IntegrationTest.InsuranceCompanyTests
 
             Company.SellPolicy(DEFAULT_OBJECT_NAME, effectiveDate, 6, riskList);
 
-            Exception ex = Assert.Throws<RiskNotAvailableException>(() =>
+            Exception ex = Assert.Throws<RiskDoesNotExistInAvailableListException>(() =>
                Company.AddRisk(DEFAULT_OBJECT_NAME, newRisk, DateTime.Now.AddMonths(1), effectiveDate)
             );
 
             Assert.AreEqual(2, FakeStorage.Instance.RiskList.Count);
-            Assert.AreEqual("Risk you are trying to add is not available.", ex.Message);
+            Assert.AreEqual($"Risk with name '{newRisk.Name}' does not exist in available list.", ex.Message);
         }
 
         [Test]
@@ -363,7 +367,8 @@ namespace InsuranceComp.IntegrationTest.InsuranceCompanyTests
             );
 
             Assert.AreEqual(2, FakeStorage.Instance.RiskList.Count);
-            Assert.AreEqual("Duplicate risk.", ex.Message);
+            Assert.AreEqual($"Risk with '{Risk2.Name}' name already exists on that policy.",
+                ex.Message);
         }
 
         [Test]

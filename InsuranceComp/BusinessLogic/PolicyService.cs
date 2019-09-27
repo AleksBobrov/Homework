@@ -25,7 +25,8 @@ namespace InsuranceComp.BusinessLogic
 
             var policyModel = _policyRepository.Get(policyId);
 
-            if (policyModel == null) throw new NoSuchPolicyException();
+            if (policyModel == null) throw new NoSuchPolicyException(nameOfInsuredObject, 
+                effectiveDate);
 
             var policyRisks = _riskRepository
                 .GetAll()
@@ -48,7 +49,8 @@ namespace InsuranceComp.BusinessLogic
         {
             var policyId = IdGenerator.ConstructPolicyId(policy.NameOfInsuredObject, policy.ValidFrom);
 
-            if (_policyRepository.Get(policyId) != null) throw new DuplicatePolicyException();
+            if (_policyRepository.Get(policyId) != null)
+                throw new DuplicatePolicyException(policy.NameOfInsuredObject, policy.ValidFrom);
 
             var policyModel = new PolicyModel {
                 Id = policyId,

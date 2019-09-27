@@ -39,7 +39,7 @@ namespace InsuranceComp
 
             if (validFrom.Date < DateTime.Now.Date) throw new RiskValidFromDateInPastException();
 
-            if (!AvailableRisks.Contains(risk)) throw new RiskNotAvailableException();
+            if (!AvailableRisks.Contains(risk)) throw new RiskDoesNotExistInAvailableListException(risk.Name);
 
             _riskService.AddRisk(nameOfInsuredObject, risk, validFrom, effectiveDate);
         }

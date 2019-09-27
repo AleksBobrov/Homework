@@ -7,7 +7,7 @@ namespace InsuranceComp.UnitTest.BusinessLogic.Test.Exceptions.Test
     public class CannotBeNullExceptionTest
     {
         [Test]
-        public void ShouldThrowCorrectTextMessage()
+        public void ShouldThrowWithCorrectTextMessage()
         {
             string testVariable = "test";
 
