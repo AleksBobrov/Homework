@@ -5,7 +5,8 @@ namespace InsuranceComp.BusinessLogic.Exceptions
     [Serializable]
     public class CannotBeNullException : Exception
     {
-        public CannotBeNullException() : base("Parameter can not be null.") 
+        public CannotBeNullException(string argName) 
+            : base("Argument '" + argName + "' can not be null.")
         {
 
         }

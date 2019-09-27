@@ -1,25 +1,16 @@
-﻿using InsuranceComp.BusinessLogic;
-using InsuranceComp.BusinessLogic.Exceptions;
-using InsuranceComp.DataAccess.Providers;
-using InsuranceComp.DataAccess.Repositories;
+﻿using InsuranceComp.BusinessLogic.Exceptions;
 using InsuranceComp.Helpers;
 using NUnit.Framework;
 using System;
 
-namespace IdGeneratorTests
+namespace InsuranceComp.IntegrationTest.IdGeneratorTests
 {
     [TestFixture]
     public class IdGeneratorTests
-    {
-        IRiskRepository RiskRepository;
-        IPremiumCalculator PremiumCalculator;
-
+    { 
         [SetUp]
         public void Setup()
         {
-            IRiskDataProvider riskDataProvider = new RiskDataProvider();
-            RiskRepository = new RiskRepository(riskDataProvider);
-            PremiumCalculator = new PremiumCalculator(RiskRepository);
         }
 
         [Test]
@@ -36,7 +27,7 @@ namespace IdGeneratorTests
             Exception ex = Assert.Throws<CannotBeNullException>(() =>
                 IdGenerator.ConstructPolicyId(null, new DateTime(2020, 5, 5)));
 
-            Assert.AreEqual("Parameter can not be null.", ex.Message);
+            Assert.AreEqual("Argument 'name' can not be null.", ex.Message);
         }
 
         [Test]
@@ -53,7 +44,7 @@ namespace IdGeneratorTests
             Exception ex = Assert.Throws<CannotBeNullException>(() =>
                 IdGenerator.ConstructRiskId(null, "Obj", new DateTime(2020, 5, 5)));
 
-            Assert.AreEqual("Parameter can not be null.", ex.Message);
+            Assert.AreEqual("Argument 'riskName' can not be null.", ex.Message);
         }
 
         [Test]
@@ -62,7 +53,7 @@ namespace IdGeneratorTests
             Exception ex = Assert.Throws<CannotBeNullException>(() =>
                 IdGenerator.ConstructRiskId("Test risk", null, new DateTime(2020, 5, 5)));
 
-            Assert.AreEqual("Parameter can not be null.", ex.Message);
+            Assert.AreEqual("Argument 'parentName' can not be null.", ex.Message);
         }
     }
 }

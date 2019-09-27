@@ -1,15 +1,15 @@
 ﻿using FluentAssertions;
-using InsuranceComp;
 using InsuranceComp.BusinessLogic;
 using InsuranceComp.BusinessLogic.Exceptions;
 using InsuranceComp.DataAccess.Providers;
 using InsuranceComp.DataAccess.Repositories;
 using InsuranceComp.Helpers;
+using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 
-namespace InsuranceCompanyTests
+namespace InsuranceComp.IntegrationTest.InsuranceCompanyTests
 {
     [TestFixture]
     public class InsuranceCompanyTest
@@ -147,7 +147,7 @@ namespace InsuranceCompanyTests
             );
 
             Assert.AreEqual(0, FakeStorage.Instance.PolicyList.Count);
-            Assert.AreEqual("Parameter can not be null.", ex.Message);
+            Assert.AreEqual("Argument 'nameOfInsuredObject' can not be null.", ex.Message);
         }
 
         [Test]
@@ -158,7 +158,7 @@ namespace InsuranceCompanyTests
             );
 
             Assert.AreEqual(0, FakeStorage.Instance.PolicyList.Count);
-            Assert.AreEqual("Parameter can not be null.", ex.Message);
+            Assert.AreEqual("Argument 'nameOfInsuredObject' can not be null.", ex.Message);
         }
 
         [Test]
@@ -266,7 +266,7 @@ namespace InsuranceCompanyTests
             );
 
             Assert.AreEqual(0, FakeStorage.Instance.PolicyList.Count);
-            Assert.AreEqual("Parameter can not be null.", ex.Message);
+            Assert.AreEqual("Argument 'nameOfInsuredObject' can not be null.", ex.Message);
         }
 
         [Test]
@@ -277,7 +277,7 @@ namespace InsuranceCompanyTests
             );
 
             Assert.AreEqual(0, FakeStorage.Instance.PolicyList.Count);
-            Assert.AreEqual("Parameter can not be null.", ex.Message);
+            Assert.AreEqual("Argument 'nameOfInsuredObject' can not be null.", ex.Message);
         }
 
         [Test]
@@ -421,6 +421,28 @@ namespace InsuranceCompanyTests
 
             Assert.AreEqual(2, FakeStorage.Instance.RiskList.Count);
             Assert.AreEqual("When removing risk, date should not be in past and should be within policy validity period.", ex.Message);
+        }
+
+        [Test]
+        public void Mock()
+        {
+            var policyRepositoryMock = new Mock<IPolicyRepository>();
+            var riskRepositorMock = new Mock<IRiskRepository>();
+            var premiumCalculatorMock = new Mock<IPremiumCalculator>();
+
+            policyRepositoryMock.Setup(pService => pService.Get("Obj05.05.2020 00:00:00"))
+                .Returns(new PolicyModel());
+
+            riskRepositorMock.Setup(riskRepo => riskRepo.GetAll()).Returns(new List<RiskModel> {
+                new RiskModel()
+            });
+
+            PolicyService ps = new PolicyService(policyRepositoryMock.Object, 
+                riskRepositorMock.Object, premiumCalculatorMock.Object);
+
+            var mockGetPolicyCall = ps.GetPolicy("Obj", new DateTime(2020, 5, 5));
+
+            policyRepositoryMock.Verify(polRepMock => polRepMock.Get("Obj05.05.2020 00:00:00"), Times.Once);
         }
     }
 }

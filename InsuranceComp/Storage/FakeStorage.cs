@@ -2,6 +2,7 @@
 
 namespace InsuranceComp
 {
+    //Used simple singleton as a fake database to not overcomplicate homework
     public sealed class FakeStorage
     { 
         public List<PolicyModel> PolicyList { get; set; }

@@ -1,5 +1,4 @@
-﻿using InsuranceComp;
-using InsuranceComp.BusinessLogic;
+﻿using InsuranceComp.BusinessLogic;
 using InsuranceComp.DataAccess.Providers;
 using InsuranceComp.DataAccess.Repositories;
 using InsuranceComp.Helpers;
@@ -7,7 +6,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 
-namespace PremiumCalculatorTests
+namespace InsuranceComp.IntegrationTest.PremiumCalculatorTests
 {
     [TestFixture]
     public class PremiumCalculatorTest

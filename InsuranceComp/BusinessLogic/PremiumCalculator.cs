@@ -13,6 +13,7 @@ namespace InsuranceComp.BusinessLogic
         {
             _riskRepository = riskRepository;
         }
+        //Used to calculate premium before adding to storage
         public decimal CalculateInitialPremium(IList<Risk> riskList, DateTime validFrom, DateTime validTill)
         {
             decimal premium = 0.0m;
@@ -24,7 +25,7 @@ namespace InsuranceComp.BusinessLogic
 
             return Math.Round(premium, 2);
         }
-
+        //Used to calculate premium for Risk already in storage
         public decimal CalculatePremiumOfSoldPolicy(string nameOfInsuredObject, DateTime effectiveDate)
         {
             var policyId = IdGenerator.ConstructPolicyId(nameOfInsuredObject, effectiveDate);

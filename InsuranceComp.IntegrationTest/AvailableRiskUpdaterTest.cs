@@ -1,11 +1,11 @@
-using InsuranceComp;
 using InsuranceComp.BusinessLogic.Exceptions;
+using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AvailableRiskUpdaterTests
+namespace InsuranceComp.IntegrationTest.AvailableRiskUpdaterTests
 {
     [TestFixture]
     public class AvailableRiskUpdaterTest
@@ -150,6 +150,19 @@ namespace AvailableRiskUpdaterTests
             var riskAfterUpdate = Company.AvailableRisks.FirstOrDefault(avRisk => avRisk.Name == "Test risk 1");
             Assert.AreEqual(newYearlyPrice, riskAfterUpdate.YearlyPrice);
             Assert.AreEqual("Test risk 1", riskAfterUpdate.Name);
+        }
+
+        [Test]
+        public void TestUnit()
+        {
+            var mockCompany = new Mock<IInsuranceCompany>();
+
+            mockCompany.Setup(mock => mock.AvailableRisks.Contains(Risk1)).Returns(false);
+
+            var availableRiskUpdater = new AvailableRiskUpdater(mockCompany.Object);
+            availableRiskUpdater.AddAvailableRisk(Risk1);
+
+            mockCompany.Verify(mock => mock.AvailableRisks.Add(Risk1), Times.Once);
         }
     }
 }

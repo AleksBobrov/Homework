@@ -34,7 +34,8 @@ namespace InsuranceComp
 
         public void AddRisk(string nameOfInsuredObject, Risk risk, DateTime validFrom, DateTime effectiveDate)
         {
-            if (string.IsNullOrEmpty(nameOfInsuredObject)) throw new CannotBeNullException();
+            if (string.IsNullOrEmpty(nameOfInsuredObject))
+                throw new CannotBeNullException(nameof(nameOfInsuredObject));
 
             if (validFrom.Date < DateTime.Now.Date) throw new RiskValidFromDateInPastException();
 
@@ -57,7 +58,8 @@ namespace InsuranceComp
 
         public IPolicy SellPolicy(string nameOfInsuredObject, DateTime validFrom, short validMonths, IList<Risk> selectedRisks)
         {
-            if (string.IsNullOrEmpty(nameOfInsuredObject)) throw new CannotBeNullException();
+            if (string.IsNullOrEmpty(nameOfInsuredObject))
+                throw new CannotBeNullException(nameof(nameOfInsuredObject));
 
             if (validFrom.Date < DateTime.Now.Date) throw new PolicyEffectiveDateInPastException();
 
