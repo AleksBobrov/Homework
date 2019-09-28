@@ -126,5 +126,112 @@ namespace InsuranceComp.UnitTest.BusinessLogic.Test
 
             riskRepositoryMock.Verify(mock => mock.Add(It.IsAny<RiskModel>()), Times.Once);
         }
+
+        [Test]
+        public void RemoveRisk_ShouldCallPolicyRepositoryGet()
+        {
+            var riskRepositoryMock = new Mock<IRiskRepository>();
+            var policyRepositoryMock = new Mock<IPolicyRepository>();
+
+            var riskService = new RiskService(policyRepositoryMock.Object,
+                riskRepositoryMock.Object);
+
+            var effectiveDate = DateTime.Now;
+
+            policyRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
+                .Returns(new PolicyModel() {
+                    ValidTill = effectiveDate.AddMonths(6)
+                });
+
+            riskRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
+                .Returns(new RiskModel()
+                {
+
+                });
+
+            riskService.RemoveRisk("obj", new Risk() { Name = "risk name"}, 
+                effectiveDate.AddMonths(2), effectiveDate);
+
+            policyRepositoryMock.Verify(mock => mock.Get(It.IsAny<string>()), Times.Once);
+        }
+
+        [Test]
+        public void RemoveRisk_ShouldThrowIfValidTillIsLaterThanPolicyValidTill()
+        {
+            var riskRepositoryMock = new Mock<IRiskRepository>();
+            var policyRepositoryMock = new Mock<IPolicyRepository>();
+
+            var riskService = new RiskService(policyRepositoryMock.Object,
+                riskRepositoryMock.Object);
+
+            var effectiveDate = DateTime.Now;
+
+            policyRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
+                .Returns(new PolicyModel()
+                {
+                    ValidTill = effectiveDate.AddMonths(6)
+                });
+            
+            Assert.That(() => riskService.RemoveRisk("obj", new Risk() { Name = "risk name" },
+                effectiveDate.AddMonths(7), effectiveDate), Throws.Exception);
+        }
+
+        [Test]
+        public void RemoveRisk_ShouldCallRiskRepositoryGet()
+        {
+            var riskRepositoryMock = new Mock<IRiskRepository>();
+            var policyRepositoryMock = new Mock<IPolicyRepository>();
+
+            var riskService = new RiskService(policyRepositoryMock.Object,
+                riskRepositoryMock.Object);
+
+            var effectiveDate = DateTime.Now;
+
+            policyRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
+                .Returns(new PolicyModel()
+                {
+                    ValidTill = effectiveDate.AddMonths(6)
+                });
+
+            riskRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
+                .Returns(new RiskModel()
+                {
+
+                });
+
+            riskService.RemoveRisk("obj", new Risk() { Name = "risk name" },
+                effectiveDate.AddMonths(2), effectiveDate);
+
+            riskRepositoryMock.Verify(mock => mock.Get(It.IsAny<string>()), Times.Once);
+        }
+
+        [Test]
+        public void RemoveRisk_ShouldCallRiskRepositoryEdit()
+        {
+            var riskRepositoryMock = new Mock<IRiskRepository>();
+            var policyRepositoryMock = new Mock<IPolicyRepository>();
+
+            var riskService = new RiskService(policyRepositoryMock.Object,
+                riskRepositoryMock.Object);
+
+            var effectiveDate = DateTime.Now;
+
+            policyRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
+                .Returns(new PolicyModel()
+                {
+                    ValidTill = effectiveDate.AddMonths(6)
+                });
+
+            riskRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
+                .Returns(new RiskModel()
+                {
+
+                });
+
+            riskService.RemoveRisk("obj", new Risk() { Name = "risk name" },
+                effectiveDate.AddMonths(2), effectiveDate);
+
+            riskRepositoryMock.Verify(mock => mock.Edit(It.IsAny<RiskModel>()), Times.Once);
+        }
     }
 }

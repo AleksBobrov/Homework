@@ -48,7 +48,7 @@ namespace InsuranceComp.BusinessLogic
 
             var policyModel = _policyRepository.Get(policyId);
 
-            if (validTill.Date > policyModel.ValidTill) throw new RiskRemovalDateException();
+            if (validTill.Date > policyModel.ValidTill.Date) throw new RiskRemovalDateException();
 
             var riskId = IdGenerator.ConstructRiskId(risk.Name, nameOfInsuredObject, effectiveDate);
            
