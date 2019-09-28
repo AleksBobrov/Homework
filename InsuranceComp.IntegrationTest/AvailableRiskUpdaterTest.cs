@@ -114,41 +114,28 @@ namespace InsuranceComp.IntegrationTest.AvailableRiskUpdaterTests
         }
 
         [Test]
-        public void AvailableRisks_UpdateNameOfExistingRisk_RiskNameShouldBeUpdatedAndYearlyPriceShouldNotBeChanged()
+        public void AvailableRisks_UpdateNameOfExistingRisk_RiskNameShouldThrowIfNewPriceIsNegative()
         {
-            const string newName = "Updated test risk 1";
+            const decimal newYearlyPrice = -0.1m;
 
-            Risk updatedRisk = new Risk
-            {
-                Name = newName
-            };
+            Exception ex = Assert.Throws<NegativeRiskYearlyPriceException>(() =>
+                AvailableRiskUpdater
+                    .AddAvailableRisk(Risk1)
+                    .AddAvailableRisk(Risk2)
+                    .UpdateAvailableRisk("Test risk 1", newYearlyPrice)
+             );
 
-            AvailableRiskUpdater
-                .AddAvailableRisk(Risk1)
-                .AddAvailableRisk(Risk2)
-                .UpdateAvailableRisk("Test risk 1", updatedRisk);
-
-            Assert.IsTrue(Company.AvailableRisks.Any(avRisk => avRisk.Name == newName));
-            Assert.IsFalse(Company.AvailableRisks.Any(avRisk => avRisk.Name == "Test risk 1"));
-
-            var riskAfterUpdate = Company.AvailableRisks.FirstOrDefault(avRisk => avRisk.Name == newName);
-
-            Assert.AreEqual(Risk1.YearlyPrice, riskAfterUpdate.YearlyPrice);
+            Assert.AreEqual("Risk yearly price can not be negative.", ex.Message);
         }
 
         public void AvailableRisks_UpdateYearlyPriceOfExistingRisk_RiskYearlyPriceShouldBeUpdated()
         {
             const decimal newYearlyPrice = 4.0m;
 
-            Risk updatedRisk = new Risk
-            {
-                YearlyPrice = newYearlyPrice
-            };
-
             AvailableRiskUpdater
                 .AddAvailableRisk(Risk1)
                 .AddAvailableRisk(Risk2)
-                .UpdateAvailableRisk("Test risk 1", updatedRisk);
+                .UpdateAvailableRisk("Test risk 1", newYearlyPrice);
 
             var riskAfterUpdate = Company.AvailableRisks.FirstOrDefault(avRisk => avRisk.Name == "Test risk 1");
             Assert.AreEqual(newYearlyPrice, riskAfterUpdate.YearlyPrice);

@@ -117,5 +117,27 @@ namespace InsuranceComp.UnitTest.BusinessLogic.Test
 
             mockCompany.Verify(mock => mock.AvailableRisks, Times.Exactly(2));
         }
+
+        [Test]
+        public void UpdateAvailableRisk_ShouldThrowIfPriceIsNegative()
+        {
+            var mockCompany = new Mock<IInsuranceCompany>();
+
+            var availableRiskUpdater = new AvailableRiskUpdater(mockCompany.Object);
+
+            Assert.That(() => availableRiskUpdater.UpdateAvailableRisk("test risk name", -0.1m), 
+                Throws.Exception);
+        }
+
+        [Test]
+        public void UpdateAvailableRisk_ShouldCallRemove()
+        {
+            var mockCompany = new Mock<IInsuranceCompany>();
+
+            var availableRiskUpdater = new AvailableRiskUpdater(mockCompany.Object);
+
+            Assert.That(() => availableRiskUpdater.UpdateAvailableRisk("test risk name", -0.1m),
+                Throws.Exception);
+        }
     }
 }

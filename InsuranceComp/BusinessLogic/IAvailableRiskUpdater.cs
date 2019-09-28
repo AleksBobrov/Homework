@@ -6,7 +6,7 @@
 
         IAvailableRiskUpdater RemoveAvailableRisk(string nameOfRisktoRemove);
 
-        IAvailableRiskUpdater UpdateAvailableRisk(string nameOfRisktoUpdate, Risk riskUpdate);
+        IAvailableRiskUpdater UpdateAvailableRisk(string nameOfRisktoUpdate, decimal newYearlyPrice);
 
         IAvailableRiskUpdater EmptyAvailableRiskList();
     }

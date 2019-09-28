@@ -32,42 +32,30 @@ namespace InsuranceComp
 
         public IAvailableRiskUpdater RemoveAvailableRisk(string nameOfRisktoRemove)
         {
-            var riskIndex = _insuranceCompany
+            var risk = _insuranceCompany
                 .AvailableRisks
-                .ToList()
-                .FindIndex(risk => risk.Name == nameOfRisktoRemove);
+                .FirstOrDefault(avRisk => avRisk.Name == nameOfRisktoRemove);
 
-            if (riskIndex == -1)
+            if (string.IsNullOrEmpty(risk.Name))
             {
                 throw new RiskDoesNotExistInAvailableListException(nameOfRisktoRemove);
             } else
             {
-                _insuranceCompany.AvailableRisks.RemoveAt(riskIndex);
+                _insuranceCompany.AvailableRisks.Remove(risk);
             }
             return this;
         }
 
-        public IAvailableRiskUpdater UpdateAvailableRisk(string nameOfRisktoUpdate, Risk riskUpdate)
+        public IAvailableRiskUpdater UpdateAvailableRisk(string nameOfRisktoUpdate, decimal newYearlyPrice)
         {
-            var riskToUpdate = _insuranceCompany.AvailableRisks
-                .FirstOrDefault(avRisk => avRisk.Name == nameOfRisktoUpdate);
+            if (newYearlyPrice < 0) throw new NegativeRiskYearlyPriceException();
 
-            if (riskUpdate.Name == null)
-            {
-                riskUpdate.Name = riskToUpdate.Name;
-            }
+            RemoveAvailableRisk(nameOfRisktoUpdate);
 
-            if (riskUpdate.YearlyPrice == 0.0m)
-            {
-                riskUpdate.YearlyPrice = riskToUpdate.YearlyPrice;
-            }
-
-            _insuranceCompany.AvailableRisks = _insuranceCompany
-                .AvailableRisks
-                .Where(avRisk => avRisk.Name != nameOfRisktoUpdate)
-                .ToList();
-
-            _insuranceCompany.AvailableRisks.Add(riskUpdate);
+            AddAvailableRisk(new Risk {
+                Name = nameOfRisktoUpdate,
+                YearlyPrice = newYearlyPrice
+            });
 
             return this;
         }
