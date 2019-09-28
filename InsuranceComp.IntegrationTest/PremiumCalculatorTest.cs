@@ -73,21 +73,6 @@ namespace InsuranceComp.IntegrationTest.PremiumCalculatorTests
         }
 
         [Test]
-        public void PremiumCalculator_ShouldCalculateInitialPremiumForNotYetSoldPolicy()
-        {
-            List<Risk> riskList = new List<Risk>();
-            riskList.Add(Risk1);
-            riskList.Add(Risk2);
-
-            var effectiveDate = DateTime.Now;
-
-            var premium = PremiumCalculator
-                .CalculateInitialPremium(riskList, effectiveDate, effectiveDate.AddMonths(6));
-
-            Assert.AreEqual(648.22m, premium);
-        }
-
-        [Test]
         public void PremiumCalculator_ShouldCalculatePremiumForSoldPolicyWithOnlyInitialRisks()
         {
             List<Risk> riskList = new List<Risk>();
