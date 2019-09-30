@@ -1,6 +1,7 @@
 ﻿using InsuranceComp.BusinessLogic.Exceptions;
 using InsuranceComp.DataAccess.Repositories;
 using InsuranceComp.Helpers;
+using InsuranceComp.InsuranceCompDomain;
 using System;
 
 namespace InsuranceComp.BusinessLogic

@@ -2,6 +2,7 @@
 using InsuranceComp.DataAccess.Providers;
 using InsuranceComp.DataAccess.Repositories;
 using InsuranceComp.Helpers;
+using InsuranceComp.InsuranceCompDomain;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;

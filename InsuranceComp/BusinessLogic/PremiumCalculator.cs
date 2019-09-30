@@ -1,5 +1,6 @@
 ﻿using InsuranceComp.DataAccess.Repositories;
 using InsuranceComp.Helpers;
+using InsuranceComp.InsuranceCompDomain;
 using System;
 using System.Collections.Generic;
 using System.Linq;

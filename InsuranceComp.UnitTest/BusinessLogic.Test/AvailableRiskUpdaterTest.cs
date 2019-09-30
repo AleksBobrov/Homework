@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using InsuranceComp.InsuranceCompDomain;
+using Moq;
 using NUnit.Framework;
 using System.Collections.Generic;
 

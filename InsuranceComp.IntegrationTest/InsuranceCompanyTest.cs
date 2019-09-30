@@ -4,6 +4,7 @@ using InsuranceComp.BusinessLogic.Exceptions;
 using InsuranceComp.DataAccess.Providers;
 using InsuranceComp.DataAccess.Repositories;
 using InsuranceComp.Helpers;
+using InsuranceComp.InsuranceCompDomain;
 using Moq;
 using NUnit.Framework;
 using System;

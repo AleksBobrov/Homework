@@ -1,5 +1,6 @@
 ﻿using InsuranceComp.BusinessLogic;
 using InsuranceComp.DataAccess.Repositories;
+using InsuranceComp.InsuranceCompDomain;
 using Moq;
 using NUnit.Framework;
 using System;

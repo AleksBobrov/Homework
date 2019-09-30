@@ -1,4 +1,6 @@
-﻿namespace InsuranceComp
+﻿using InsuranceComp.InsuranceCompDomain;
+
+namespace InsuranceComp
 {
     public interface IAvailableRiskUpdater
     {

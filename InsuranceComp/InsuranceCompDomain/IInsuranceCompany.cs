@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace InsuranceComp
+namespace InsuranceComp.InsuranceCompDomain
 {
     public interface IInsuranceCompany
     {

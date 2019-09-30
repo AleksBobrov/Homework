@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InsuranceComp.InsuranceCompDomain;
+using System;
 
 namespace InsuranceComp.BusinessLogic
 {

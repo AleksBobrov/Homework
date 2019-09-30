@@ -1,4 +1,7 @@
+using InsuranceComp.BusinessLogic;
 using InsuranceComp.BusinessLogic.Exceptions;
+using InsuranceComp.InsuranceCompDomain;
+using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -19,7 +22,10 @@ namespace InsuranceComp.IntegrationTest.AvailableRiskUpdaterTests
         public void Setup()
         {
             List<Risk> initialAvailableRisks = new List<Risk>();
-            Company = new InsuranceCompany("If", initialAvailableRisks);
+            Company = new InsuranceCompany("If", initialAvailableRisks,
+                new Mock<IPolicyService>().Object,
+                new Mock<IRiskService>().Object,
+                new Mock<IPremiumCalculator>().Object);
             AvailableRiskUpdater = new AvailableRiskUpdater(Company);
 
             Risk1 = new Risk

@@ -1,4 +1,5 @@
 ﻿using InsuranceComp.BusinessLogic.Exceptions;
+using InsuranceComp.InsuranceCompDomain;
 using System.Linq;
 
 namespace InsuranceComp

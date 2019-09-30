@@ -3,7 +3,7 @@ using InsuranceComp.BusinessLogic.Exceptions;
 using System;
 using System.Collections.Generic;
 
-namespace InsuranceComp
+namespace InsuranceComp.InsuranceCompDomain
 {
     public class InsuranceCompany : IInsuranceCompany
     {
@@ -16,11 +16,6 @@ namespace InsuranceComp
         private IRiskService _riskService;
 
         private IPremiumCalculator _premiumCalculator;
-        public InsuranceCompany(string name, IList<Risk> availableRisks)
-        {
-            Name = name;
-            AvailableRisks = availableRisks;
-        }
 
         public InsuranceCompany(string name, IList<Risk> availableRisks, 
             IPolicyService policyService, IRiskService riskService, IPremiumCalculator premiumCalculator)

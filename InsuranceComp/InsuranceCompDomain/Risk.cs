@@ -1,4 +1,4 @@
-﻿namespace InsuranceComp
+﻿namespace InsuranceComp.InsuranceCompDomain
 {
     public struct Risk
     {
