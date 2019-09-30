@@ -18,5 +18,10 @@ namespace InsuranceComp.DataAccess.Providers
         {
             FakeStorage.Instance.PolicyList.RemoveAll(policy => policy.Id == id);
         }
+
+        public void Add(PolicyModel policyModel)
+        {
+            FakeStorage.Instance.PolicyList.Add(policyModel);
+        }
     }
 }

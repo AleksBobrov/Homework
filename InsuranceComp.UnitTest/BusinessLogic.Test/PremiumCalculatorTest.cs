@@ -113,7 +113,7 @@ namespace InsuranceComp.UnitTest.BusinessLogic.Test
             var premium = new PremiumCalculator(riskRepositoryMock.Object)
                 .CalculatePremiumOfSoldPolicy("obj", validFrom);
 
-            Assert.AreEqual(435.34m, premium);
+            Assert.AreEqual(433.15m, premium);
         }
     }
 }

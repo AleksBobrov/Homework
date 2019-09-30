@@ -12,8 +12,7 @@ namespace InsuranceComp.DataAccess.Repositories
 
         public void Add(RiskModel model)
         {
-            var data = _dataProvider.GetAll();
-            data.Add(model);
+            _dataProvider.Add(model); 
         }
 
         public void Edit(RiskModel model)

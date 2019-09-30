@@ -14,28 +14,12 @@ namespace InsuranceComp.IntegrationTest.IdGeneratorTests
         }
 
         [Test]
-        public void IdGenerator_ShouldCorrectlyGeneratePolicyId()
-        {
-            var policyId = IdGenerator.ConstructPolicyId("Obj", new DateTime(2020, 5, 5));
-
-            Assert.AreEqual("Obj05.05.2020 00:00:00", policyId);
-        }
-
-        [Test]
         public void IdGenerator_ShouldNotAllowGeneratePolicyIdWithNullObjectName()
         {
             Exception ex = Assert.Throws<CannotBeNullException>(() =>
                 IdGenerator.ConstructPolicyId(null, new DateTime(2020, 5, 5)));
 
             Assert.AreEqual("Argument 'name' can not be null.", ex.Message);
-        }
-
-        [Test]
-        public void IdGenerator_ShouldCorrectlyGenerateRiskId()
-        {
-            var policyId = IdGenerator.ConstructRiskId("Test risk", "Obj", new DateTime(2020, 5, 5));
-            
-            Assert.AreEqual("Test riskObj05.05.2020 00:00:00", policyId);
         }
 
         [Test]

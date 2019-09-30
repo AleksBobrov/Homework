@@ -9,5 +9,7 @@ namespace InsuranceComp
         T Get(string id);
 
         void Remove(string id);
+
+        void Add(T model);
     }
 }

@@ -12,8 +12,7 @@ namespace InsuranceComp
 
         public void Add(PolicyModel model)
         {
-            var data = _dataProvider.GetAll();
-            data.Add(model);
+           _dataProvider.Add(model);
         }
 
         public void Edit(PolicyModel model)
