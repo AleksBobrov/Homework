@@ -9,6 +9,7 @@ namespace InsuranceComp.UnitTest.DataAccess.Test.Repositories.Test
     {
         Mock<IPolicyDataProvider> PolicyDataProviderMock;
         PolicyRepository PolicyRepository;
+        string DEFAULT_TEST_ID = "testid";
 
         [SetUp]
         public void SetUp()
@@ -49,7 +50,7 @@ namespace InsuranceComp.UnitTest.DataAccess.Test.Repositories.Test
         public void Edit_DataProviderRemoveWasCalled()
         {
             PolicyRepository.Edit(new PolicyModel() {
-                Id = "testid"
+                Id = DEFAULT_TEST_ID
             });
 
             PolicyDataProviderMock.Verify(mock => mock.Remove(It.IsAny<string>()), Times.Once);
@@ -60,7 +61,7 @@ namespace InsuranceComp.UnitTest.DataAccess.Test.Repositories.Test
         {
             PolicyRepository.Edit(new PolicyModel()
             {
-                Id = "testid"
+                Id = DEFAULT_TEST_ID
             });
 
             PolicyDataProviderMock.Verify(mock => mock.Add(It.IsAny<PolicyModel>()), Times.Once);

@@ -11,199 +11,154 @@ namespace InsuranceComp.UnitTest.BusinessLogic.Test
     [TestFixture]
     public class RiskServiceTest
     {
+        string DEFAULT_OBJECT_NAME = "obj";
+        string DEFAULT_RISK_NAME = "risk";
+        Mock<IRiskRepository> RiskRepositoryMock;
+        Mock<IPolicyRepository> PolicyRepositoryMock;
+        IRiskService RiskService;
+        DateTime EffectiveDate;
+
+        [SetUp]
+        public void SetUp()
+        {
+            EffectiveDate = DateTime.Now;
+            RiskRepositoryMock = new Mock<IRiskRepository>();
+            PolicyRepositoryMock = new Mock<IPolicyRepository>();
+
+            RiskService = new RiskService(PolicyRepositoryMock.Object, RiskRepositoryMock.Object);
+        }
+
         [Test]
         public void AddRisk_ShouldThrowIfValidTillIsEarlierThanEffectiveDate()
         {
-            var riskRepositoryMock = new Mock<IRiskRepository>();
-            var policyRepositoryMock = new Mock<IPolicyRepository>();
-
-            var riskService = new RiskService(policyRepositoryMock.Object, 
-                riskRepositoryMock.Object);
-
-            Assert.That(() => riskService.AddRisk(It.IsAny<string>(), It.IsAny<Risk>(), 
+            Assert.That(() => RiskService.AddRisk(It.IsAny<string>(), It.IsAny<Risk>(), 
                 DateTime.Now.AddMonths(-1), DateTime.Now), Throws.Exception);
         }
 
         [Test]
         public void AddRisk_ShouldCallPolicyRepositoryGetOnce()
         {
-            var riskRepositoryMock = new Mock<IRiskRepository>();
-            var policyRepositoryMock = new Mock<IPolicyRepository>();
-
-            var riskService = new RiskService(policyRepositoryMock.Object,
-                riskRepositoryMock.Object);
-
-            var effectiveDate = DateTime.Now;
-
-            policyRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
+            PolicyRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
                 .Returns(new PolicyModel() {
-                    NameOfInsuredObject = "obj",
-                    ValidFrom = effectiveDate,
-                    ValidTill = effectiveDate.AddMonths(6),
+                    NameOfInsuredObject = DEFAULT_OBJECT_NAME,
+                    ValidFrom = EffectiveDate,
+                    ValidTill = EffectiveDate.AddMonths(6),
                     InsuredRisks = new List<Risk>()
                 });
 
-            riskService.AddRisk("obj", new Risk() { Name = "risk name"},
-                effectiveDate.AddDays(1), effectiveDate);
+            RiskService.AddRisk(DEFAULT_OBJECT_NAME, new Risk() { Name = DEFAULT_RISK_NAME},
+                EffectiveDate.AddDays(1), EffectiveDate);
 
-            policyRepositoryMock.Verify(mock => mock.Get(It.IsAny<string>()), Times.Once);
+            PolicyRepositoryMock.Verify(mock => mock.Get(It.IsAny<string>()), Times.Once);
         }
 
         [Test]
         public void AddRisk_ShouldThrowIfValidFromIsLaterThanPolicyValidTill()
         {
-            var riskRepositoryMock = new Mock<IRiskRepository>();
-            var policyRepositoryMock = new Mock<IPolicyRepository>();
-
-            var riskService = new RiskService(policyRepositoryMock.Object,
-                riskRepositoryMock.Object);
-
-            var effectiveDate = DateTime.Now;
-
-            policyRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
+            PolicyRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
                 .Returns(new PolicyModel()
                 {
-                    NameOfInsuredObject = "obj",
-                    ValidFrom = effectiveDate,
-                    ValidTill = effectiveDate.AddMonths(6),
+                    NameOfInsuredObject = DEFAULT_OBJECT_NAME,
+                    ValidFrom = EffectiveDate,
+                    ValidTill = EffectiveDate.AddMonths(6),
                     InsuredRisks = new List<Risk>()
                 });
 
-            Assert.That(() => riskService.AddRisk("Obj", It.IsAny<Risk>(),
-                 effectiveDate.AddMonths(7), effectiveDate), Throws.Exception);
+            Assert.That(() => RiskService.AddRisk(DEFAULT_OBJECT_NAME, It.IsAny<Risk>(),
+                 EffectiveDate.AddMonths(7), EffectiveDate), Throws.Exception);
         }
 
         [Test]
         public void AddRisk_ShouldThrowIfPolicyAlreadyHaveRiskWithSameName()
         {
-            var riskRepositoryMock = new Mock<IRiskRepository>();
-            var policyRepositoryMock = new Mock<IPolicyRepository>();
-
-            var riskService = new RiskService(policyRepositoryMock.Object,
-                riskRepositoryMock.Object);
-
-            var effectiveDate = DateTime.Now;
-
-            policyRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
+            PolicyRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
                 .Returns(new PolicyModel()
                 {
-                    NameOfInsuredObject = "obj",
-                    ValidFrom = effectiveDate,
-                    ValidTill = effectiveDate.AddMonths(6),
+                    NameOfInsuredObject = DEFAULT_OBJECT_NAME,
+                    ValidFrom = EffectiveDate,
+                    ValidTill = EffectiveDate.AddMonths(6),
                     InsuredRisks = new List<Risk>()
                     {
-                        new Risk() { Name = "risk name" }
+                        new Risk() { Name = DEFAULT_RISK_NAME }
                     }
                 });
 
-            Assert.That(() => riskService.AddRisk("Obj", new Risk() { Name = "risk name" },
-                 effectiveDate, effectiveDate), Throws.Exception);
+            Assert.That(() => RiskService.AddRisk(DEFAULT_OBJECT_NAME, new Risk() { Name = DEFAULT_RISK_NAME },
+                 EffectiveDate, EffectiveDate), Throws.Exception);
         }
 
         [Test]
         public void AddRisk_ShouldCallRiskRepositoryGetOnce()
         {
-            var riskRepositoryMock = new Mock<IRiskRepository>();
-            var policyRepositoryMock = new Mock<IPolicyRepository>();
-
-            var riskService = new RiskService(policyRepositoryMock.Object,
-                riskRepositoryMock.Object);
-
-            var effectiveDate = DateTime.Now;
-
-            policyRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
+            PolicyRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
                 .Returns(new PolicyModel()
                 {
-                    NameOfInsuredObject = "obj",
-                    ValidFrom = effectiveDate,
-                    ValidTill = effectiveDate.AddMonths(6),
+                    NameOfInsuredObject = DEFAULT_OBJECT_NAME,
+                    ValidFrom = EffectiveDate,
+                    ValidTill = EffectiveDate.AddMonths(6),
                     InsuredRisks = new List<Risk>()
                 });
 
-            riskRepositoryMock.Setup(mock => mock.Add(It.IsAny<RiskModel>())).Verifiable();
+            RiskRepositoryMock.Setup(mock => mock.Add(It.IsAny<RiskModel>())).Verifiable();
 
-            riskService.AddRisk("obj", new Risk() { Name = "risk name" },
-                effectiveDate.AddDays(1), effectiveDate);
+            RiskService.AddRisk(DEFAULT_OBJECT_NAME, new Risk() { Name = DEFAULT_RISK_NAME },
+                EffectiveDate.AddDays(1), EffectiveDate);
 
-            riskRepositoryMock.Verify(mock => mock.Add(It.IsAny<RiskModel>()), Times.Once);
+            RiskRepositoryMock.Verify(mock => mock.Add(It.IsAny<RiskModel>()), Times.Once);
         }
 
         [Test]
         public void RemoveRisk_ShouldCallPolicyRepositoryGet()
         {
-            var riskRepositoryMock = new Mock<IRiskRepository>();
-            var policyRepositoryMock = new Mock<IPolicyRepository>();
-
-            var riskService = new RiskService(policyRepositoryMock.Object,
-                riskRepositoryMock.Object);
-
-            var effectiveDate = DateTime.Now;
-
-            policyRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
+            PolicyRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
                 .Returns(new PolicyModel() {
-                    ValidTill = effectiveDate.AddMonths(6)
+                    ValidTill = EffectiveDate.AddMonths(6)
                 });
 
-            riskRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
+            RiskRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
                 .Returns(new RiskModel()
                 {
 
                 });
 
-            riskService.RemoveRisk("obj", new Risk() { Name = "risk name"}, 
-                effectiveDate.AddMonths(2), effectiveDate);
+            RiskService.RemoveRisk(DEFAULT_OBJECT_NAME, new Risk() { Name = DEFAULT_RISK_NAME}, 
+                EffectiveDate.AddMonths(2), EffectiveDate);
 
-            policyRepositoryMock.Verify(mock => mock.Get(It.IsAny<string>()), Times.Once);
+            PolicyRepositoryMock.Verify(mock => mock.Get(It.IsAny<string>()), Times.Once);
         }
 
         [Test]
         public void RemoveRisk_ShouldThrowIfValidTillIsLaterThanPolicyValidTill()
         {
-            var riskRepositoryMock = new Mock<IRiskRepository>();
-            var policyRepositoryMock = new Mock<IPolicyRepository>();
-
-            var riskService = new RiskService(policyRepositoryMock.Object,
-                riskRepositoryMock.Object);
-
-            var effectiveDate = DateTime.Now;
-
-            policyRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
+            PolicyRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
                 .Returns(new PolicyModel()
                 {
-                    ValidTill = effectiveDate.AddMonths(6)
+                    ValidTill = EffectiveDate.AddMonths(6)
                 });
             
-            Assert.That(() => riskService.RemoveRisk("obj", new Risk() { Name = "risk name" },
-                effectiveDate.AddMonths(7), effectiveDate), Throws.Exception);
+            Assert.That(() => RiskService.RemoveRisk(DEFAULT_OBJECT_NAME, new Risk() { Name = DEFAULT_RISK_NAME },
+                EffectiveDate.AddMonths(7), EffectiveDate), Throws.Exception);
         }
 
         [Test]
         public void RemoveRisk_ShouldCallRiskRepositoryGet()
         {
-            var riskRepositoryMock = new Mock<IRiskRepository>();
-            var policyRepositoryMock = new Mock<IPolicyRepository>();
-
-            var riskService = new RiskService(policyRepositoryMock.Object,
-                riskRepositoryMock.Object);
-
-            var effectiveDate = DateTime.Now;
-
-            policyRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
+            PolicyRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
                 .Returns(new PolicyModel()
                 {
-                    ValidTill = effectiveDate.AddMonths(6)
+                    ValidTill = EffectiveDate.AddMonths(6)
                 });
 
-            riskRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
+            RiskRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
                 .Returns(new RiskModel()
                 {
 
                 });
 
-            riskService.RemoveRisk("obj", new Risk() { Name = "risk name" },
-                effectiveDate.AddMonths(2), effectiveDate);
+            RiskService.RemoveRisk(DEFAULT_OBJECT_NAME, new Risk() { Name = DEFAULT_RISK_NAME },
+                EffectiveDate.AddMonths(2), EffectiveDate);
 
-            riskRepositoryMock.Verify(mock => mock.Get(It.IsAny<string>()), Times.Once);
+            RiskRepositoryMock.Verify(mock => mock.Get(It.IsAny<string>()), Times.Once);
         }
 
         [Test]
@@ -215,12 +170,12 @@ namespace InsuranceComp.UnitTest.BusinessLogic.Test
             var riskService = new RiskService(policyRepositoryMock.Object,
                 riskRepositoryMock.Object);
 
-            var effectiveDate = DateTime.Now;
+            var EffectiveDate = DateTime.Now;
 
             policyRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
                 .Returns(new PolicyModel()
                 {
-                    ValidTill = effectiveDate.AddMonths(6)
+                    ValidTill = EffectiveDate.AddMonths(6)
                 });
 
             riskRepositoryMock.Setup(mock => mock.Get(It.IsAny<string>()))
@@ -229,8 +184,8 @@ namespace InsuranceComp.UnitTest.BusinessLogic.Test
 
                 });
 
-            riskService.RemoveRisk("obj", new Risk() { Name = "risk name" },
-                effectiveDate.AddMonths(2), effectiveDate);
+            riskService.RemoveRisk(DEFAULT_OBJECT_NAME, new Risk() { Name = DEFAULT_RISK_NAME },
+                EffectiveDate.AddMonths(2), EffectiveDate);
 
             riskRepositoryMock.Verify(mock => mock.Edit(It.IsAny<RiskModel>()), Times.Once);
         }

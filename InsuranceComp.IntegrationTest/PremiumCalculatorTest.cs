@@ -88,7 +88,7 @@ namespace InsuranceComp.IntegrationTest.PremiumCalculatorTests
 
             var premium = PremiumCalculator.CalculatePremiumOfSoldPolicy(DEFAULT_OBJECT_NAME, effectiveDate);
 
-            Assert.AreEqual(648.22m, premium);
+            Assert.AreEqual(651.48m, premium);
         }
 
         [Test]
@@ -108,7 +108,7 @@ namespace InsuranceComp.IntegrationTest.PremiumCalculatorTests
 
             var premium = PremiumCalculator.CalculatePremiumOfSoldPolicy(DEFAULT_OBJECT_NAME, effectiveDate);
 
-            Assert.AreEqual(846.58m, premium);
+            Assert.AreEqual(851.68m, premium);
         }
 
         [Test]
@@ -128,7 +128,7 @@ namespace InsuranceComp.IntegrationTest.PremiumCalculatorTests
 
             var premium = PremiumCalculator.CalculatePremiumOfSoldPolicy(DEFAULT_OBJECT_NAME, effectiveDate);
 
-            Assert.AreEqual(271.23m, premium);
+            Assert.AreEqual(272.61m, premium);
         }
     }
 }

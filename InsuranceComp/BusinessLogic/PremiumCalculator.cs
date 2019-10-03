@@ -21,7 +21,7 @@ namespace InsuranceComp.BusinessLogic
 
             foreach (var insuredRisk in riskList)
             {
-                premium += insuredRisk.YearlyPrice / 365.0m * (decimal)(validTill - validFrom).TotalDays;
+                premium += Math.Round(insuredRisk.YearlyPrice / 365.0m, 2) * (int)(validTill - validFrom).TotalDays;
             }
 
             return Math.Round(premium, 2);
@@ -39,8 +39,8 @@ namespace InsuranceComp.BusinessLogic
 
             foreach (var insuredRisk in insuredRisks)
             {
-                premium += insuredRisk.YearlyPrice / 365.0m * 
-                    (decimal)(insuredRisk.ValidTill - insuredRisk.ValidFrom).TotalDays;
+                premium += Math.Round(insuredRisk.YearlyPrice / 365.0m, 2) * 
+                    (int)(insuredRisk.ValidTill - insuredRisk.ValidFrom).TotalDays;
             }
 
             return Math.Round(premium, 2);

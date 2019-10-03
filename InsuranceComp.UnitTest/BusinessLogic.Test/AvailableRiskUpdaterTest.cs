@@ -8,75 +8,63 @@ namespace InsuranceComp.UnitTest.BusinessLogic.Test
     [TestFixture]
     public class AvailableRiskUpdaterTest
     {
+        Mock<IInsuranceCompany> CompanyMock;
+        IAvailableRiskUpdater AvailableRiskUpdater;
+
+        string DEFAULT_RISK_NAME = "test risk name";
+
+        Risk DefaultRisk = new Risk
+        {
+            Name = "Test risk 1",
+            YearlyPrice = 5.5m
+        };
+
+        [SetUp]
+        public void SetUp()
+        {
+            CompanyMock = new Mock<IInsuranceCompany>();
+            AvailableRiskUpdater = new AvailableRiskUpdater(CompanyMock.Object);
+        }
+
         [Test]
         public void AddAvailableRisk_ShouldCallAddMethodOnAvalaibleRiskList()
         {
-            var testRisk = new Risk {
-                Name = "Test risk 1",
-                YearlyPrice = 5.5m
-            };
+            CompanyMock.Setup(mock => mock.AvailableRisks.Contains(DefaultRisk)).Returns(false);
 
-            var mockCompany = new Mock<IInsuranceCompany>();
+            AvailableRiskUpdater.AddAvailableRisk(DefaultRisk);
 
-            mockCompany.Setup(mock => mock.AvailableRisks.Contains(testRisk)).Returns(false);
-
-            var availableRiskUpdater = new AvailableRiskUpdater(mockCompany.Object);
-            availableRiskUpdater.AddAvailableRisk(testRisk);
-
-            mockCompany.Verify(mock => mock.AvailableRisks.Add(testRisk), Times.Once);
+            CompanyMock.Verify(mock => mock.AvailableRisks.Add(DefaultRisk), Times.Once);
         }
 
         [Test]
         public void AddAvailableRisk_ShouldThrowWhenAvaialableRisksListAlreadyContainRisk()
         {
-            var testRisk = new Risk
-            {
-                Name = "Test risk 1",
-                YearlyPrice = 5.5m
-            };
+            CompanyMock.Setup(mock => mock.AvailableRisks.Contains(DefaultRisk)).Returns(true);
 
-            var mockCompany = new Mock<IInsuranceCompany>();
-
-            mockCompany.Setup(mock => mock.AvailableRisks.Contains(testRisk)).Returns(true);
-
-            var availableRiskUpdater = new AvailableRiskUpdater(mockCompany.Object);
-            Assert.That(() => availableRiskUpdater.AddAvailableRisk(testRisk), Throws.Exception);
+            Assert.That(() => AvailableRiskUpdater.AddAvailableRisk(DefaultRisk), Throws.Exception);
         }
 
         [Test]
         public void EmptyAvailableRiskList_ShouldCallClearMethodOnAvailableListRisk()
         {
-            var mockCompany = new Mock<IInsuranceCompany>();
+            CompanyMock.Setup(mock => mock.AvailableRisks.Clear()).Verifiable();
 
-            mockCompany.Setup(mock => mock.AvailableRisks.Clear()).Verifiable();
+            AvailableRiskUpdater.EmptyAvailableRiskList();
 
-            var availableRiskUpdater = new AvailableRiskUpdater(mockCompany.Object);
-            availableRiskUpdater.EmptyAvailableRiskList();
-
-            mockCompany.Verify(mock => mock.AvailableRisks.Clear(), Times.Once);
+            CompanyMock.Verify(mock => mock.AvailableRisks.Clear(), Times.Once);
         }
 
         [Test]
         public void RemoveAvailableRisk_ShouldThrowIfRiskDoesNotExist()
         {
-            var testRisk = new Risk
-            {
-                Name = "Test risk 1",
-                YearlyPrice = 5.5m
-            };
-
             var testAvailableRiskList = new List<Risk>();
-            testAvailableRiskList.Add(testRisk);
+            testAvailableRiskList.Add(DefaultRisk);
 
-            var mockCompany = new Mock<IInsuranceCompany>();
+            var testRiskName = DEFAULT_RISK_NAME;
 
-            var testRiskName = "test risk";
-
-            mockCompany.Setup(mock => mock.AvailableRisks).Returns(testAvailableRiskList);
-
-            var availableRiskUpdater = new AvailableRiskUpdater(mockCompany.Object);
+            CompanyMock.Setup(mock => mock.AvailableRisks).Returns(testAvailableRiskList);
             
-            Assert.That(() => availableRiskUpdater.RemoveAvailableRisk(testRiskName), Throws.Exception);
+            Assert.That(() => AvailableRiskUpdater.RemoveAvailableRisk(testRiskName), Throws.Exception);
         }
 
         [Test]
@@ -84,60 +72,39 @@ namespace InsuranceComp.UnitTest.BusinessLogic.Test
         {
             var testAvailableRiskList = new List<Risk>(); 
 
-            var mockCompany = new Mock<IInsuranceCompany>();
+            var testRiskName = DEFAULT_RISK_NAME;
 
-            var testRiskName = "test risk";
+            CompanyMock.Setup(mock => mock.AvailableRisks).Returns(testAvailableRiskList);
 
-            mockCompany.Setup(mock => mock.AvailableRisks).Returns(testAvailableRiskList);
-
-            var availableRiskUpdater = new AvailableRiskUpdater(mockCompany.Object);
-
-            Assert.That(() => availableRiskUpdater.RemoveAvailableRisk(testRiskName), Throws.Exception);
+            Assert.That(() => AvailableRiskUpdater.RemoveAvailableRisk(testRiskName), Throws.Exception);
         }
 
         [Test]
         public void RemoveAvailableRisk_ShouldCallAvailableRisksListToChangeValue()
         {
-            var testRisk = new Risk
-            {
-                Name = "test risk",
-                YearlyPrice = 5.5m
-            };
-
             var testAvailableRiskList = new List<Risk>();
-            testAvailableRiskList.Add(testRisk);
+            testAvailableRiskList.Add(DefaultRisk);
 
-            var mockCompany = new Mock<IInsuranceCompany>();
+            var testRiskName = DEFAULT_RISK_NAME;
 
-            var testRiskName = "test risk";
+            CompanyMock.Setup(mock => mock.AvailableRisks).Returns(testAvailableRiskList);
 
-            mockCompany.Setup(mock => mock.AvailableRisks).Returns(testAvailableRiskList);
+            AvailableRiskUpdater.RemoveAvailableRisk(testRiskName);
 
-            var availableRiskUpdater = new AvailableRiskUpdater(mockCompany.Object);
-            availableRiskUpdater.RemoveAvailableRisk(testRiskName);
-
-            mockCompany.Verify(mock => mock.AvailableRisks, Times.Exactly(2));
+            CompanyMock.Verify(mock => mock.AvailableRisks, Times.Exactly(2));
         }
 
         [Test]
         public void UpdateAvailableRisk_ShouldThrowIfPriceIsNegative()
         {
-            var mockCompany = new Mock<IInsuranceCompany>();
-
-            var availableRiskUpdater = new AvailableRiskUpdater(mockCompany.Object);
-
-            Assert.That(() => availableRiskUpdater.UpdateAvailableRisk("test risk name", -0.1m), 
+            Assert.That(() => AvailableRiskUpdater.UpdateAvailableRisk(DEFAULT_RISK_NAME, -0.1m), 
                 Throws.Exception);
         }
 
         [Test]
         public void UpdateAvailableRisk_ShouldCallRemove()
         {
-            var mockCompany = new Mock<IInsuranceCompany>();
-
-            var availableRiskUpdater = new AvailableRiskUpdater(mockCompany.Object);
-
-            Assert.That(() => availableRiskUpdater.UpdateAvailableRisk("test risk name", -0.1m),
+            Assert.That(() => AvailableRiskUpdater.UpdateAvailableRisk(DEFAULT_RISK_NAME, -0.1m),
                 Throws.Exception);
         }
     }

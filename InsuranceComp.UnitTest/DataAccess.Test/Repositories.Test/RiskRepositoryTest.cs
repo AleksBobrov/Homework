@@ -10,6 +10,7 @@ namespace InsuranceComp.UnitTest.DataAccess.Test.Repositories.Test
     {
         Mock<IRiskDataProvider> RiskDataProviderMock;
         RiskRepository RiskRepository;
+        string DEFAULT_TEST_ID = "testid";
 
         [SetUp]
         public void SetUp()
@@ -51,7 +52,7 @@ namespace InsuranceComp.UnitTest.DataAccess.Test.Repositories.Test
         {
             RiskRepository.Edit(new RiskModel()
             {
-                Id = "testid"
+                Id = DEFAULT_TEST_ID
             });
 
             RiskDataProviderMock.Verify(mock => mock.Remove(It.IsAny<string>()), Times.Once);
@@ -62,7 +63,7 @@ namespace InsuranceComp.UnitTest.DataAccess.Test.Repositories.Test
         {
             RiskRepository.Edit(new RiskModel()
             {
-                Id = "testid"
+                Id = DEFAULT_TEST_ID
             });
 
             RiskDataProviderMock.Verify(mock => mock.Add(It.IsAny<RiskModel>()), Times.Once);

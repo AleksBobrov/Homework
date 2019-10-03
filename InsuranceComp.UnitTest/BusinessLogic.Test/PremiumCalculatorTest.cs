@@ -11,6 +11,17 @@ namespace InsuranceComp.UnitTest.BusinessLogic.Test
     [TestFixture]
     public class PremiumCalculatorTest
     {
+        string DEFAULT_OBJECT_NAME = "obj";
+        Mock<IRiskRepository> RiskRepositoryMock;
+        PremiumCalculator PremiumCalculator;
+
+        [SetUp]
+        public void SetUp()
+        {
+            RiskRepositoryMock = new Mock<IRiskRepository>();
+            PremiumCalculator = new PremiumCalculator(RiskRepositoryMock.Object);
+        }
+
         [Test]
         public void CalculateInitialPremium_ShouldCorrectlyCalculatePremium()
         {
@@ -32,36 +43,32 @@ namespace InsuranceComp.UnitTest.BusinessLogic.Test
 
             var effectiveDate = DateTime.Now;
 
-            var premium = new PremiumCalculator(new Mock<IRiskRepository>().Object)
+            var premium = PremiumCalculator
                 .CalculateInitialPremium(riskList, effectiveDate, effectiveDate.AddMonths(6));
 
-            Assert.AreEqual(648.22m, premium);
+            Assert.AreEqual(651.48m, premium);
         }
 
         [Test]
         public void CalculatePremiumOfSoldPolicy_ShouldCallRiskRepositoryGetAllOnce()
         {
-            var riskRepositoryMock = new Mock<IRiskRepository>();
+            RiskRepositoryMock.Setup(mock => mock.GetAll()).Returns(new List<RiskModel>());
 
-            riskRepositoryMock.Setup(mock => mock.GetAll()).Returns(new List<RiskModel>());
+            var premium = new PremiumCalculator(RiskRepositoryMock.Object)
+                .CalculatePremiumOfSoldPolicy(DEFAULT_OBJECT_NAME, DateTime.Now);
 
-            var premium = new PremiumCalculator(riskRepositoryMock.Object)
-                .CalculatePremiumOfSoldPolicy("obj", DateTime.Now);
-
-            riskRepositoryMock.Verify(mock => mock.GetAll(), Times.Once);
+            RiskRepositoryMock.Verify(mock => mock.GetAll(), Times.Once);
         }
 
         [Test]
         public void CalculatePremiumOfSoldPolicy_ShouldCorrectlyCalculatePremiumWhenRiskValidityPeriodsAreSameWithPolicy()
         {
-            var riskRepositoryMock = new Mock<IRiskRepository>();
-
             var validFrom = DateTime.Now;
             var validTill = validFrom.AddMonths(6);
 
-            var policyId = "obj" + validFrom.ToString();
+            var policyId = DEFAULT_OBJECT_NAME + validFrom.ToString();
 
-            riskRepositoryMock.Setup(mock => mock.GetAll()).Returns(new List<RiskModel>() {
+            RiskRepositoryMock.Setup(mock => mock.GetAll()).Returns(new List<RiskModel>() {
                 new RiskModel()
                 {
                     YearlyPrice = 500.0m,
@@ -78,10 +85,10 @@ namespace InsuranceComp.UnitTest.BusinessLogic.Test
                 }
             });
 
-            var premium = new PremiumCalculator(riskRepositoryMock.Object)
-                .CalculatePremiumOfSoldPolicy("obj", validFrom);
+            var premium = PremiumCalculator
+                .CalculatePremiumOfSoldPolicy(DEFAULT_OBJECT_NAME, validFrom);
 
-            Assert.AreEqual(648.22m, premium);
+            Assert.AreEqual(651.48m, premium);
         }
 
         [Test]
@@ -92,7 +99,7 @@ namespace InsuranceComp.UnitTest.BusinessLogic.Test
             var validFrom = DateTime.Now;
             var validTill = validFrom.AddMonths(6);
 
-            var policyId = "obj" + validFrom.ToString();
+            var policyId = DEFAULT_OBJECT_NAME + validFrom.ToString();
 
             riskRepositoryMock.Setup(mock => mock.GetAll()).Returns(new List<RiskModel>() {
                 new RiskModel()
@@ -111,10 +118,10 @@ namespace InsuranceComp.UnitTest.BusinessLogic.Test
                 }
             });
 
-            var premium = new PremiumCalculator(riskRepositoryMock.Object)
-                .CalculatePremiumOfSoldPolicy("obj", validFrom);
+            var premium = PremiumCalculator
+                .CalculatePremiumOfSoldPolicy(DEFAULT_OBJECT_NAME, validFrom);
 
-            Assert.AreEqual(433.15m, premium);
+            Assert.AreEqual(432.13m, premium);
         }
     }
 }

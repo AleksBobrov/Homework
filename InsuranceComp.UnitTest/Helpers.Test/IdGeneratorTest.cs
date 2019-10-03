@@ -7,34 +7,40 @@ namespace InsuranceComp.UnitTest.Helpers.Test
     [TestFixture]
     public class IdGeneratorTest
     {
+        string DEFAULT_OBJECT_NAME = "Obj";
+        string DEFAULT_RISK_NAME = "Test risk";
+        DateTime DEFAULT_DATE = new DateTime(2020, 5, 5);
+
         [Test]
         public void IdGenerator_ShouldCorrectlyGeneratePolicyId()
         {
-            var policyId = IdGenerator.ConstructPolicyId("Obj", new DateTime(2020, 5, 5));
+            var expectedPolicyId = $"{DEFAULT_OBJECT_NAME}{DEFAULT_DATE.ToString()}";
+            var policyId = IdGenerator.ConstructPolicyId(DEFAULT_OBJECT_NAME, DEFAULT_DATE);
 
-            Assert.AreEqual("Obj05.05.2020 00:00:00", policyId);
+            Assert.AreEqual(expectedPolicyId, policyId);
         }
 
         [Test]
         public void IdGenerator_ShouldThrowWithNullObjectName()
         {
-            Assert.That(() => IdGenerator.ConstructPolicyId(null, new DateTime(2020, 5, 5)),
+            Assert.That(() => IdGenerator.ConstructPolicyId(null, DEFAULT_DATE),
                 Throws.Exception);
         }
 
         [Test]
         public void IdGenerator_ShouldCorrectlyGenerateRiskId()
         {
-            var policyId = IdGenerator.ConstructRiskId("Test risk", "Obj", new DateTime(2020, 5, 5));
+            var expectedRiskId = $"{DEFAULT_RISK_NAME}{DEFAULT_OBJECT_NAME}{DEFAULT_DATE.ToString()}";
+            var riskId = IdGenerator.ConstructRiskId(DEFAULT_RISK_NAME, DEFAULT_OBJECT_NAME, DEFAULT_DATE);
 
-            Assert.AreEqual("Test riskObj05.05.2020 00:00:00", policyId);
+            Assert.AreEqual(expectedRiskId, riskId);
         }
 
         [Test]
         public void IdGenerator_ShouldThrowWithNullRiskName()
         {
             Assert.That(() =>
-                IdGenerator.ConstructRiskId(null, "Obj", new DateTime(2020, 5, 5)),
+                IdGenerator.ConstructRiskId(null, DEFAULT_OBJECT_NAME, DEFAULT_DATE),
                 Throws.Exception);
         }
 
@@ -43,7 +49,7 @@ namespace InsuranceComp.UnitTest.Helpers.Test
         {
 
             Assert.That(() =>
-                IdGenerator.ConstructRiskId("Test risk", null, new DateTime(2020, 5, 5)),
+                IdGenerator.ConstructRiskId(DEFAULT_RISK_NAME, null, DEFAULT_DATE),
                 Throws.Exception);
         }
     }
