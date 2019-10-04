@@ -1,6 +1,6 @@
 # Homework
 
-Just download it and open solution file.
+Just download/clone and open solution file.
 
 
 
