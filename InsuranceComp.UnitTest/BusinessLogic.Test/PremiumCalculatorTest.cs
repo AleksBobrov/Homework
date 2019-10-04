@@ -94,14 +94,12 @@ namespace InsuranceComp.UnitTest.BusinessLogic.Test
         [Test]
         public void CalculatePremiumOfSoldPolicy_ShouldCorrectlyCalculatePremiumWhenRiskValidityPeriodsAreDifferentFromPolicy()
         {
-            var riskRepositoryMock = new Mock<IRiskRepository>();
-
             var validFrom = DateTime.Now;
             var validTill = validFrom.AddMonths(6);
 
             var policyId = DEFAULT_OBJECT_NAME + validFrom.ToString();
 
-            riskRepositoryMock.Setup(mock => mock.GetAll()).Returns(new List<RiskModel>() {
+            RiskRepositoryMock.Setup(mock => mock.GetAll()).Returns(new List<RiskModel>() {
                 new RiskModel()
                 {
                     YearlyPrice = 500.0m,

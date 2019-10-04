@@ -23,7 +23,6 @@ namespace InsuranceComp.Helpers
             if (string.IsNullOrEmpty(riskName)) throw new CannotBeNullException(nameof(riskName));
             if (string.IsNullOrEmpty(parentName)) throw new CannotBeNullException(nameof(parentName));
 
-
             return riskName + parentName + effectiveDate.ToString();
         }
     }

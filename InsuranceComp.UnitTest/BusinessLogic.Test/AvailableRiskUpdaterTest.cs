@@ -83,7 +83,7 @@ namespace InsuranceComp.UnitTest.BusinessLogic.Test
         public void RemoveAvailableRisk_ShouldCallAvailableRisksListToChangeValue()
         {
             var testAvailableRiskList = new List<Risk>();
-            testAvailableRiskList.Add(DefaultRisk);
+            testAvailableRiskList.Add(new Risk { Name = DEFAULT_RISK_NAME });
 
             var testRiskName = DEFAULT_RISK_NAME;
 
